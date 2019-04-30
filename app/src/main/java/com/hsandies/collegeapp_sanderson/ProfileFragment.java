@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
@@ -13,6 +14,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.backendless.Backendless;
@@ -20,6 +23,7 @@ import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 import com.backendless.persistence.DataQueryBuilder;
 
+import java.io.File;
 import java.util.Date;
 import java.util.List;
 
@@ -32,6 +36,10 @@ public class ProfileFragment extends Fragment {
     public Profile mProfile;
     public static final int REQUEST_DATE_OF_BIRTH = 0;
     Button DatePickerButton;
+    //private final static String
+    private ImageButton mSelfieButton;
+    private ImageView mSelfieView;
+    private File mSelfieFile;
 
 
     @Override
@@ -175,5 +183,12 @@ public class ProfileFragment extends Fragment {
                 Log.e("Profile Fragment", "Failed to find profile: " + fault.getMessage());
             }
         });
+    }
+    public File getPhotoFile() {
+        File externalFilesDir = getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        if (externalFilesDir == null) {
+            return null;
+        }
+        return new File (externalFilesDir, mProfile.getPhotoFilename());
     }
 }

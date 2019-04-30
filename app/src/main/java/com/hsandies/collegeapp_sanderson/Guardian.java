@@ -1,28 +1,30 @@
 package com.hsandies.collegeapp_sanderson;
 
 public class Guardian extends FamilyMember {
-
-    String lastName;
-    String firstName;
-
-    public String getLastName() {
-        return lastName;
+    private String occupation;
+    public Guardian(String first, String last){
+        super(first, last);
+        occupation= "unknown";
     }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public Guardian() {
+    public Guardian(){
         super();
+        occupation= "unknown";
+
+    }
+    public Guardian (String first, String last, String occupation){
+        super(first,last);
+        this.occupation = occupation;
     }
 
+    public String getOccupation() {
+        return occupation;
+    }
+
+    public void setOccupation(String occupation) {
+        this.occupation = occupation;
+    }
+    @Override
+    public String toString(){
+        return "Guardian: " + getFirstName() + " " + getLastName() + "\nOccupation: " + getOccupation();
+    }
 }

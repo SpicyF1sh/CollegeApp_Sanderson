@@ -3,18 +3,15 @@ package com.hsandies.collegeapp_sanderson;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -25,33 +22,34 @@ import com.backendless.exceptions.BackendlessFault;
 
 public class ApplicantActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-
+    public static final String EMAIL_PREF = "EMAIL_PREF";
+    private final String MY_EMAIL_ADRESS= "haydensand011@gmail.com";
     Fragment contentFragment = null;
+    String APP_ID;
+    String API_KEY;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        SharedPreferences sharedPreferences =
-                this.getPreferences(Context.MODE_PRIVATE);
+        APP_ID = getString(R.string.APP_ID);
+        API_KEY = getString(R.string.API_KEY);
+        SharedPreferences sharedPreferences = this.getPreferences(Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(EMAIL_PREF, MY_EMAIL_ADDRESS);
+        editor.putString(EMAIL_PREF,MY_EMAIL_ADRESS);
         editor.commit();
-        final String APP_ID = getString(R.string.APP_ID);
-        final String APP_KEY = getString(R.string.APP_KEY);
-        Backendless.initApp(this, APP_ID, APP_KEY);
-
+        Backendless.initApp(this, APP_ID, API_KEY);
         BackendlessUser user = new BackendlessUser();
-        user.setEmail("test@gmail.com");
-        user.setPassword("test");
-
-        Backendless.UserService.register(user, new AsyncCallback<BackendlessUser>(){
+        user.setEmail("haydensand011@gmail.com");
+        user.setPassword("password");
+        Backendless.UserService.register(user, new AsyncCallback<BackendlessUser>() {
             @Override
-            public void handleResponse(BackendlessUser backendlessUser){
-                Log.i( "User ", backendlessUser.getEmail() + " successfully registered" );
+            public void handleResponse(BackendlessUser response) {
+                Log.i("register", response.toString());
             }
+
             @Override
-            public void handleFault(BackendlessFault backendlessFault) {
-                Log.e( "Backendless error", backendlessFault.getMessage());
+            public void handleFault(BackendlessFault fault) {
+                Log.i("error", fault.toString());
             }
         });
 
@@ -59,19 +57,14 @@ public class ApplicantActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+
+
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
+        drawer.setDrawerListener(toggle);
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -117,10 +110,10 @@ public class ApplicantActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.family_member) {
-            contentFragment = new FamilyMemberFragment();
+            contentFragment = new GuardianFragment();
         } else if (id == R.id.profile) {
-        contentFragment = new ProfileFragment();
-    }
+            contentFragment = new ProfileFragment();
+        }
         if (contentFragment != null) {
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.content_frame, contentFragment);

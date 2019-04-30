@@ -1,13 +1,22 @@
 package com.hsandies.collegeapp_sanderson;
 
 public abstract class ApplicantData {
-    private String mEmail;
+    String email = "";
+    String objectId;
 
     public String getEmail() {
-        return mEmail;
+        return email;
     }
 
     public void setEmail(String email) {
-        mEmail = email;
+        this.email = email;
+    }
+
+    public String getObjectId() {
+        return objectId;
+    }
+
+    public void setObjectId(String objectId) {
+        this.objectId = objectId;
     }
 }
