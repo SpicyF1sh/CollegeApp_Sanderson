@@ -25,8 +25,7 @@ public class DatePickerFragment extends DialogFragment {
 
     @Override
     public AlertDialog onCreateDialog(Bundle bundle){
-        View v = LayoutInflater.from(getActivity())
-                .inflate(R.layout.fragment_date_picker, null);
+        View v = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_date_of_birth, null);
         mDate = (Date)getArguments().getSerializable(DATE_ARGUMENT);
         if (mDate == null){
             mDate = new Date();
@@ -35,10 +34,7 @@ public class DatePickerFragment extends DialogFragment {
         mCalendar.setTime(mDate);
         mDatePicker = (DatePicker) v.findViewById(R.id.dialog_date_of_birth);
         mDatePicker.init(mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH), mCalendar.get(Calendar.DAY_OF_MONTH), null);
-        return new AlertDialog.Builder(getActivity())
-                .setView(v)
-                .setTitle("Date of Birth")
-                .setPositiveButton("Done", new DialogInterface.OnClickListener() {
+        return new AlertDialog.Builder(getActivity()).setView(v).setTitle("Date of Birth").setPositiveButton("Done", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
@@ -46,8 +42,7 @@ public class DatePickerFragment extends DialogFragment {
 
                         sendResult(Activity.RESULT_OK, date);
                     }
-                })
-                .create();
+                }).create();
     }
 
     public static DatePickerFragment newInstance(Date date) {

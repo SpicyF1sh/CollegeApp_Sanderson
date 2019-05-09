@@ -4,14 +4,14 @@ import java.util.ArrayList;
 
 public class Family {
     private final String TAG = Family.class.getName();
-    private ArrayList<FamilyMember> family;
+    private static ArrayList<FamilyMember> family;
     private static Family sFamily;
 
     private Family(){
         family = new ArrayList<>();
-        family.add(new Guardian("",""));
-        family.add(new Guardian());
-        family.add(new Sibling("", ""));
+        family.add(new Guardian("John","Doe", "Accountant"));
+        family.add(new Guardian("Jane", "Doe", "Walmart Cashier"));
+        family.add(new Sibling("Joe", "Shmoe"));
     }
 
     public static Family getFamily(){
@@ -21,7 +21,7 @@ public class Family {
         return sFamily;
     }
 
-    public ArrayList<FamilyMember> getFamilyList(){
+    public static ArrayList<FamilyMember> getFamilyList(){
         return family;
     }
 

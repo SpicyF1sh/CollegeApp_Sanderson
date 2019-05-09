@@ -1,6 +1,5 @@
 package com.hsandies.collegeapp_sanderson;
 
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
@@ -28,8 +27,7 @@ public class FamilyListFragment extends ListFragment {
     Family mFamily;
 
     public FamilyListFragment(){
-        mFamily = Family.getFamily();
-    }
+        mFamily = Family.getFamily(); }
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -37,33 +35,24 @@ public class FamilyListFragment extends ListFragment {
         getActivity().setTitle(R.string.family_member_title);
         FamilyMemberAdapter adapter = new FamilyMemberAdapter(mFamily.getFamilyList());
         setListAdapter(adapter);
-        setHasOptionsMenu(true);
-    }
+        setHasOptionsMenu(true); }
 
     private class FamilyMemberAdapter extends ArrayAdapter<FamilyMember> {
         public FamilyMemberAdapter(ArrayList<FamilyMember> family) {
-            super(getActivity(), 0, family);
-        }
-
+            super(getActivity(), 0, family); }
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             if (convertView == null) {
                 convertView = getActivity().getLayoutInflater()
-                        .inflate(R.layout.list_item_family_member, null);
-            }
-
+                        .inflate(R.layout.list_item_family_member, null); }
             FamilyMember f = getItem(position);
             Log.d(TAG, "The type of FamilyMember at position " + position + " is " + f.getClass().getName());
-
             TextView nameTextView =
                     (TextView)convertView
                             .findViewById(R.id.family_member_list_item_nameTextView);
             nameTextView.setText(f.toString());
-
-            return convertView;
-        }
+            return convertView; }
     }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent,
                              Bundle savedInstanceState) {
@@ -72,30 +61,29 @@ public class FamilyListFragment extends ListFragment {
         ListView listView = (ListView)v.findViewById(android.R.id.list);
         registerForContextMenu(listView);
 
-        return v;
-    }
+        return v; }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.fragment_family_list, menu);
-    }
+        inflater.inflate(R.menu.fragment_family_list, menu); }
 
     @Override
+    //Adds new Family Members to list. If not, it duplicates.
     public boolean onOptionsItemSelected(MenuItem item) {
         FamilyMemberAdapter adapter = (FamilyMemberAdapter)getListAdapter();
         switch (item.getItemId()) {
             case R.id.menu_item_new_guardian:
                 Log.d(TAG, "Selected add new guardian.");
                 Guardian guardian = new Guardian();
-                boolean duplicate = false;
+                boolean duplicate = true;
                 for (FamilyMember f: Family.getFamily().getFamilyList()) {
                     if (f.equals(guardian)) {
-                        duplicate = true;
+                        duplicate = false;
                     }
-                    else duplicate = false;
+                    else duplicate = true;
                 }
-                if(duplicate == true) {
+                if(duplicate == false) {
                     Family.getFamily().addFamilyMember(guardian);
                     adapter.notifyDataSetChanged();
                 }
@@ -116,9 +104,7 @@ public class FamilyListFragment extends ListFragment {
                 }
                 return true;
             default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
+                return super.onOptionsItemSelected(item); } }
 
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v,
@@ -129,6 +115,7 @@ public class FamilyListFragment extends ListFragment {
     }
 
     @Override
+    //Handles deleting Family Members from the list.
     public boolean onContextItemSelected(MenuItem item) {
         Log.d(TAG, "Context item selected.");
         AdapterView.AdapterContextMenuInfo info =
@@ -153,25 +140,22 @@ public class FamilyListFragment extends ListFragment {
                                 Log.e(TAG, fault.getMessage());
                             }
                         });
-                return true;
-        }
-        return super.onContextItemSelected(item);
-    }
+                return true; }
+        return super.onContextItemSelected(item); }
 
     @Override
     public void onResume() {
         super.onResume();
         FamilyMemberAdapter adapter = (FamilyMemberAdapter) getListAdapter();
-        adapter.notifyDataSetChanged();
-    }
+        adapter.notifyDataSetChanged(); }
 
     @Override
+    //Opens the correct Fragment based on the Family Member in the list that was clicked
     public void onListItemClick(ListView l, View v, int position, long id) {
         FamilyMember f = ((FamilyMemberAdapter)getListAdapter()).getItem(position);
         Log.d(TAG, f.toString() + " was clicked." + FamilyMemberActivity.class);
         Intent i = new Intent(getActivity(), FamilyMemberActivity.class);
         i.putExtra(FamilyMember.EXTRA_RELATION, f.getClass().getName());
         i.putExtra(FamilyMember.EXTRA_INDEX, position);
-        startActivity(i);
-    }
+        startActivity(i); }
 }
